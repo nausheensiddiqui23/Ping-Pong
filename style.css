@@ -30,3 +30,11 @@ body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:fl
 }
 .sep{color:var(--muted)}
 
+.controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:var(--panel);
+  padding:8px 10px;
+  border-radius:8px;
+}
