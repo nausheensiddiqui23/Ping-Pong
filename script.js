@@ -32,3 +32,6 @@ let aiDifficulty = parseFloat(aiRange.value); // 0..1
 let running = false;
 let paused = false;
 
+const leftPaddle = { x: 20, y: 200, w: paddleWidth, h: paddleHeight, vy: 0 };
+const rightPaddle = { x: 0, y: 200, w: paddleWidth, h: paddleHeight, vy: 0 }; // x set in reset
+let ball = { x: 0, y:0, vx:0, vy:0, r: ballRadius };
