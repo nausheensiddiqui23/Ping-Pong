@@ -118,4 +118,18 @@ function update(dt){
     rightPaddle.y += Math.sign(diff) * Math.min(Math.abs(diff), paddleSpeed * (0.6 + aiDifficulty));
   }
 
+ leftPaddle.y = Math.max(0, Math.min(canvas.clientHeight - leftPaddle.h, leftPaddle.y));
+  rightPaddle.y = Math.max(0, Math.min(canvas.clientHeight - rightPaddle.h, rightPaddle.y));
 
+  // update ball
+  ball.x += ball.vx;
+  ball.y += ball.vy;
+
+  // top/bottom wall bounce
+  if (ball.y - ball.r < 0){
+    ball.y = ball.r;
+    ball.vy = -ball.vy;
+  } else if (ball.y + ball.r > canvas.clientHeight){
+    ball.y = canvas.clientHeight - ball.r;
+    ball.vy = -ball.vy;
+  }
