@@ -133,3 +133,14 @@ function update(dt){
     ball.y = canvas.clientHeight - ball.r;
     ball.vy = -ball.vy;
   }
+  if (ball.x - ball.r < leftPaddle.x + leftPaddle.w &&
+      ball.x - ball.r > leftPaddle.x &&
+      ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.h){
+    ball.x = leftPaddle.x + leftPaddle.w + ball.r;
+    // reflect and add 'spin' depending on hit position
+    const rel = (ball.y - (leftPaddle.y + leftPaddle.h/2)) / (leftPaddle.h/2);
+    const bounceAngle = rel * 0.6; // max angle
+    const speed = Math.hypot(ball.vx, ball.vy) * 1.03; // slight speed up
+    ball.vx = Math.abs(Math.cos(bounceAngle) * speed);
+    ball.vy = Math.sin(bounceAngle) * speed;
+  }
