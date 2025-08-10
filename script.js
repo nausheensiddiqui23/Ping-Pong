@@ -83,5 +83,16 @@ function togglePause(){
     requestAnimationFrame(loop);
   }
 }
-
+function reset(){
+  score.left = 0; score.right = 0;
+  scoreLeftEl.textContent = score.left;
+  scoreRightEl.textContent = score.right;
+  const cw = canvas.clientWidth;
+  leftPaddle.x = 20;
+  leftPaddle.y = (canvas.clientHeight/2) - paddleHeight/2;
+  rightPaddle.x = cw - 20 - paddleWidth;
+  rightPaddle.y = leftPaddle.y;
+  ballReset(Math.random() < 0.5 ? 1 : -1);
+  draw();
+}
 
