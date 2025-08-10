@@ -50,3 +50,12 @@ window.addEventListener('keydown', (e)=>{
     togglePause();
   }
 });
+window.addEventListener('keyup', (e)=>{
+  if (e.key === 'w') keys.w = false;
+  if (e.key === 's') keys.s = false;
+  if (e.key === 'ArrowUp') keys.up = false;
+  if (e.key === 'ArrowDown') keys.down = false;
+});
+
+
+
