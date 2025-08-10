@@ -95,4 +95,13 @@ function reset(){
   ballReset(Math.random() < 0.5 ? 1 : -1);
   draw();
 }
+function ballReset(dir=1){
+  ball.x = canvas.clientWidth/2;
+  ball.y = canvas.clientHeight/2;
+  const speed = 6; // base
+  const angle = (Math.random() * 0.6 - 0.3); // slight angle
+  ball.vx = speed * dir * Math.cos(angle);
+  ball.vy = speed * Math.sin(angle);
+}
+
 
