@@ -38,3 +38,8 @@ body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:fl
   padding:8px 10px;
   border-radius:8px;
 }
+.controls label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.controls select,input[type="range"]{cursor:pointer}
+.controls button{
+  background:transparent;border:1px solid rgba(255,255,255,0.08);color:#eaf6f2;padding:6px 10px;border-radius:6px;cursor:pointer;
+}
