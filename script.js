@@ -20,3 +20,15 @@ function resize(){
 }
 window.addEventListener('resize', resize);
 resize();
+
+const paddleWidth = 12;
+const paddleHeight = 90;
+const paddleSpeed = 8;
+const ballRadius = 8;
+const winScore = 11;
+
+let mode = modeSelect.value; // 'ai' or 'local'
+let aiDifficulty = parseFloat(aiRange.value); // 0..1
+let running = false;
+let paused = false;
+
