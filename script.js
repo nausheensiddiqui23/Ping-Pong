@@ -68,5 +68,20 @@ startBtn.addEventListener('click', ()=> {
 pauseBtn.addEventListener('click', togglePause);
 resetBtn.addEventListener('click', ()=> { reset(); draw(); });
 
+function start(){
+  running = true;
+  paused = false;
+  lastTimestamp = performance.now();
+  requestAnimationFrame(loop);
+}
+function togglePause(){
+  if (!running) return;
+  paused = !paused;
+  pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+  if (!paused) {
+    lastTimestamp = performance.now();
+    requestAnimationFrame(loop);
+  }
+}
 
 
