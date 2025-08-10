@@ -43,3 +43,14 @@ body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:fl
 .controls button{
   background:transparent;border:1px solid rgba(255,255,255,0.08);color:#eaf6f2;padding:6px 10px;border-radius:6px;cursor:pointer;
 }
+.controls button:hover{border-color:var(--accent)}
+
+#game{display:block;width:100%;height:calc(100vh - 160px);background:linear-gradient(180deg,#031020,#021022);border-radius:10px;margin:0 auto;max-width:1200px}
+
+.help{max-width:1200px;margin:8px auto 24px;padding:8px 12px;color:var(--muted);font-size:13px}
+@media (max-width:700px){
+  .topbar{flex-direction:column;align-items:stretch}
+  .controls{flex-wrap:wrap}
+  #game{height:calc(100vh - 260px)}
+}
+
