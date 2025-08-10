@@ -56,6 +56,17 @@ window.addEventListener('keyup', (e)=>{
   if (e.key === 'ArrowUp') keys.up = false;
   if (e.key === 'ArrowDown') keys.down = false;
 });
+modeSelect.addEventListener('change', ()=> {
+  mode = modeSelect.value;
+  reset();
+});
+aiRange.addEventListener('input', ()=> aiDifficulty = parseFloat(aiRange.value));
+
+startBtn.addEventListener('click', ()=> {
+  if (!running) start();
+});
+pauseBtn.addEventListener('click', togglePause);
+resetBtn.addEventListener('click', ()=> { reset(); draw(); });
 
 
 
