@@ -103,5 +103,19 @@ function ballReset(dir=1){
   ball.vx = speed * dir * Math.cos(angle);
   ball.vy = speed * Math.sin(angle);
 }
+function update(dt){
+  // paddles: left controlled by W/S
+  if (keys.w) leftPaddle.y -= paddleSpeed;
+  if (keys.s) leftPaddle.y += paddleSpeed;
+  // right paddle: either AI or player
+  if (mode === 'local'){
+    if (keys.up) rightPaddle.y -= paddleSpeed;
+    if (keys.down) rightPaddle.y += paddleSpeed;
+  } else { // AI
+    // simple predictive AI factor by difficulty
+    const targetY = ball.y - rightPaddle.h/2 + (ball.vy * (aiDifficulty*12));
+    const diff = targetY - rightPaddle.y;
+    rightPaddle.y += Math.sign(diff) * Math.min(Math.abs(diff), paddleSpeed * (0.6 + aiDifficulty));
+  }
 
 
