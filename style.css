@@ -7,3 +7,15 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,-apple-system,Arial}
 body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:flex;flex-direction:column;align-items:stretch}
+
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  width:100%;
+  max-width:1200px;
+  margin:12px auto 6px;
+}
