@@ -10,13 +10,13 @@ const modeSelect = document.getElementById('modeSelect');
 const aiRange = document.getElementById('aiRange');
 
 let DPR = Math.max(1, window.devicePixelRatio || 1);
-function resize(){
+function resize() {
   DPR = Math.max(1, window.devicePixelRatio || 1);
   canvas.width = Math.floor(Math.min(window.innerWidth, 1200) * DPR);
   canvas.height = Math.floor((window.innerHeight - 160) * DPR);
-  canvas.style.width = `${Math.min(window.innerWidth,1200)}px`;
+  canvas.style.width = `${Math.min(window.innerWidth, 1200)}px`;
   canvas.style.height = `${Math.max(200, window.innerHeight - 160)}px`;
-  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
 window.addEventListener('resize', resize);
 resize();
@@ -34,47 +34,48 @@ let paused = false;
 
 const leftPaddle = { x: 20, y: 200, w: paddleWidth, h: paddleHeight, vy: 0 };
 const rightPaddle = { x: 0, y: 200, w: paddleWidth, h: paddleHeight, vy: 0 }; // x set in reset
-let ball = { x: 0, y:0, vx:0, vy:0, r: ballRadius };
+let ball = { x: 0, y: 0, vx: 0, vy: 0, r: ballRadius };
 
-let keys = { w:false, s:false, up:false, down:false };
-let score = { left:0, right:0 };
+let keys = { w: false, s: false, up: false, down: false };
+let score = { left: 0, right: 0 };
 let lastTimestamp = 0;
 
-window.addEventListener('keydown', (e)=>{
+window.addEventListener('keydown', (e) => {
   if (e.key === 'w') keys.w = true;
   if (e.key === 's') keys.s = true;
   if (e.key === 'ArrowUp') keys.up = true;
   if (e.key === 'ArrowDown') keys.down = true;
-  if (e.key === ' '){ // space toggle pause
+  if (e.key === ' ') { // space toggle pause
     e.preventDefault();
     togglePause();
   }
 });
-window.addEventListener('keyup', (e)=>{
+window.addEventListener('keyup', (e) => {
   if (e.key === 'w') keys.w = false;
   if (e.key === 's') keys.s = false;
   if (e.key === 'ArrowUp') keys.up = false;
   if (e.key === 'ArrowDown') keys.down = false;
 });
-modeSelect.addEventListener('change', ()=> {
+
+modeSelect.addEventListener('change', () => {
   mode = modeSelect.value;
   reset();
 });
-aiRange.addEventListener('input', ()=> aiDifficulty = parseFloat(aiRange.value));
+aiRange.addEventListener('input', () => aiDifficulty = parseFloat(aiRange.value));
 
-startBtn.addEventListener('click', ()=> {
+startBtn.addEventListener('click', () => {
   if (!running) start();
 });
 pauseBtn.addEventListener('click', togglePause);
-resetBtn.addEventListener('click', ()=> { reset(); draw(); });
+resetBtn.addEventListener('click', () => { reset(); draw(); });
 
-function start(){
+function start() {
   running = true;
   paused = false;
   lastTimestamp = performance.now();
   requestAnimationFrame(loop);
 }
-function togglePause(){
+function togglePause() {
   if (!running) return;
   paused = !paused;
   pauseBtn.textContent = paused ? 'Resume' : 'Pause';
@@ -83,42 +84,42 @@ function togglePause(){
     requestAnimationFrame(loop);
   }
 }
-function reset(){
+function reset() {
   score.left = 0; score.right = 0;
   scoreLeftEl.textContent = score.left;
   scoreRightEl.textContent = score.right;
   const cw = canvas.clientWidth;
   leftPaddle.x = 20;
-  leftPaddle.y = (canvas.clientHeight/2) - paddleHeight/2;
+  leftPaddle.y = (canvas.clientHeight / 2) - paddleHeight / 2;
   rightPaddle.x = cw - 20 - paddleWidth;
   rightPaddle.y = leftPaddle.y;
   ballReset(Math.random() < 0.5 ? 1 : -1);
   draw();
 }
-function ballReset(dir=1){
-  ball.x = canvas.clientWidth/2;
-  ball.y = canvas.clientHeight/2;
-  const speed = 6; // base
-  const angle = (Math.random() * 0.6 - 0.3); // slight angle
+function ballReset(dir = 1) {
+  ball.x = canvas.clientWidth / 2;
+  ball.y = canvas.clientHeight / 2;
+  const speed = 6;
+  const angle = (Math.random() * 0.6 - 0.3);
   ball.vx = speed * dir * Math.cos(angle);
   ball.vy = speed * Math.sin(angle);
 }
-function update(dt){
+function update(dt) {
   // paddles: left controlled by W/S
   if (keys.w) leftPaddle.y -= paddleSpeed;
   if (keys.s) leftPaddle.y += paddleSpeed;
+
   // right paddle: either AI or player
-  if (mode === 'local'){
+  if (mode === 'local') {
     if (keys.up) rightPaddle.y -= paddleSpeed;
     if (keys.down) rightPaddle.y += paddleSpeed;
   } else { // AI
-    // simple predictive AI factor by difficulty
-    const targetY = ball.y - rightPaddle.h/2 + (ball.vy * (aiDifficulty*12));
+    const targetY = ball.y - rightPaddle.h / 2 + (ball.vy * (aiDifficulty * 12));
     const diff = targetY - rightPaddle.y;
     rightPaddle.y += Math.sign(diff) * Math.min(Math.abs(diff), paddleSpeed * (0.6 + aiDifficulty));
   }
 
- leftPaddle.y = Math.max(0, Math.min(canvas.clientHeight - leftPaddle.h, leftPaddle.y));
+  leftPaddle.y = Math.max(0, Math.min(canvas.clientHeight - leftPaddle.h, leftPaddle.y));
   rightPaddle.y = Math.max(0, Math.min(canvas.clientHeight - rightPaddle.h, rightPaddle.y));
 
   // update ball
@@ -126,46 +127,60 @@ function update(dt){
   ball.y += ball.vy;
 
   // top/bottom wall bounce
-  if (ball.y - ball.r < 0){
+  if (ball.y - ball.r < 0) {
     ball.y = ball.r;
     ball.vy = -ball.vy;
-  } else if (ball.y + ball.r > canvas.clientHeight){
+  } else if (ball.y + ball.r > canvas.clientHeight) {
     ball.y = canvas.clientHeight - ball.r;
     ball.vy = -ball.vy;
   }
+
+  // left paddle collision
   if (ball.x - ball.r < leftPaddle.x + leftPaddle.w &&
       ball.x - ball.r > leftPaddle.x &&
-      ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.h){
+      ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.h) {
     ball.x = leftPaddle.x + leftPaddle.w + ball.r;
-    // reflect and add 'spin' depending on hit position
-    const rel = (ball.y - (leftPaddle.y + leftPaddle.h/2)) / (leftPaddle.h/2);
-    const bounceAngle = rel * 0.6; // max angle
-    const speed = Math.hypot(ball.vx, ball.vy) * 1.03; // slight speed up
+    const rel = (ball.y - (leftPaddle.y + leftPaddle.h / 2)) / (leftPaddle.h / 2);
+    const bounceAngle = rel * 0.6;
+    const speed = Math.hypot(ball.vx, ball.vy) * 1.03;
     ball.vx = Math.abs(Math.cos(bounceAngle) * speed);
     ball.vy = Math.sin(bounceAngle) * speed;
   }
-  if (ball.x < -50){ // right scores
+
+  // ✅ right paddle collision
+  if (ball.x + ball.r > rightPaddle.x &&
+      ball.x + ball.r < rightPaddle.x + rightPaddle.w &&
+      ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.h) {
+    ball.x = rightPaddle.x - ball.r;
+    const rel = (ball.y - (rightPaddle.y + rightPaddle.h / 2)) / (rightPaddle.h / 2);
+    const bounceAngle = rel * 0.6;
+    const speed = Math.hypot(ball.vx, ball.vy) * 1.03;
+    ball.vx = -Math.abs(Math.cos(bounceAngle) * speed);
+    ball.vy = Math.sin(bounceAngle) * speed;
+  }
+
+  // scoring
+  if (ball.x < -50) {
     score.right += 1;
     scoreRightEl.textContent = score.right;
-    if (score.right >= winScore){ running = false; alert('Right player wins!'); }
+    if (score.right >= winScore) { running = false; alert('Right player wins!'); }
     ballReset(1);
-  } else if (ball.x > canvas.clientWidth + 50){
+  } else if (ball.x > canvas.clientWidth + 50) {
     score.left += 1;
     scoreLeftEl.textContent = score.left;
-    if (score.left >= winScore){ running = false; alert('Left player wins!'); }
+    if (score.left >= winScore) { running = false; alert('Left player wins!'); }
     ballReset(-1);
   }
 }
 
-// draw
-function draw(){
-  // background
-  ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
-  // court center line
+function draw() {
+  ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+  // center line
   ctx.fillStyle = 'rgba(255,255,255,0.05)';
   const w = canvas.clientWidth, h = canvas.clientHeight;
-  for (let y = 0; y < h; y += 24){
-    ctx.fillRect(w/2 - 2, y + 8, 4, 12);
+  for (let y = 0; y < h; y += 24) {
+    ctx.fillRect(w / 2 - 2, y + 8, 4, 12);
   }
 
   // paddles
@@ -175,19 +190,17 @@ function draw(){
 
   // ball
   ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
   ctx.fillStyle = '#ffd166';
   ctx.fill();
   ctx.closePath();
 
-  // small scoreboard text displayed on canvas (optional)
   ctx.fillStyle = 'rgba(255,255,255,0.08)';
   ctx.font = '12px system-ui';
   ctx.fillText('Ping Pong — JS Canvas', 12, 18);
 }
 
-// small round rect util
-function roundRect(ctx, x, y, w, h, r=6, fill=true, stroke=false){
+function roundRect(ctx, x, y, w, h, r = 6, fill = true, stroke = false) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
   ctx.arcTo(x + w, y, x + w, y + h, r);
@@ -199,20 +212,17 @@ function roundRect(ctx, x, y, w, h, r=6, fill=true, stroke=false){
   if (stroke) ctx.stroke();
 }
 
-// main loop
-function loop(ts){
+function loop(ts) {
   if (!running || paused) return;
-  const dt = Math.min(1/30, (ts - lastTimestamp) / 1000);
+  const dt = Math.min(1 / 30, (ts - lastTimestamp) / 1000);
   lastTimestamp = ts;
   update(dt);
   draw();
   requestAnimationFrame(loop);
 }
 
-// init
 reset();
 
-// expose simple keyboard start
-window.addEventListener('keydown', (e)=> {
+window.addEventListener('keydown', (e) => {
   if ((e.key === 'Enter' || e.key === ' ') && !running) { start(); }
 });
