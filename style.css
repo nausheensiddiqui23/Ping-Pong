@@ -19,3 +19,13 @@ body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:fl
   max-width:1200px;
   margin:12px auto 6px;
 }
+
+.score{
+  font-size:28px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--accent);
+}
+
