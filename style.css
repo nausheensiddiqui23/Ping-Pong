@@ -28,4 +28,5 @@ body{background:linear-gradient(180deg,#061124,#081426);color:#e8f1f2;display:fl
   gap:10px;
   color:var(--accent);
 }
+.sep{color:var(--muted)}
 
