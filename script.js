@@ -39,3 +39,14 @@ let ball = { x: 0, y:0, vx:0, vy:0, r: ballRadius };
 let keys = { w:false, s:false, up:false, down:false };
 let score = { left:0, right:0 };
 let lastTimestamp = 0;
+
+window.addEventListener('keydown', (e)=>{
+  if (e.key === 'w') keys.w = true;
+  if (e.key === 's') keys.s = true;
+  if (e.key === 'ArrowUp') keys.up = true;
+  if (e.key === 'ArrowDown') keys.down = true;
+  if (e.key === ' '){ // space toggle pause
+    e.preventDefault();
+    togglePause();
+  }
+});
