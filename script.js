@@ -144,3 +144,75 @@ function update(dt){
     ball.vx = Math.abs(Math.cos(bounceAngle) * speed);
     ball.vy = Math.sin(bounceAngle) * speed;
   }
+  if (ball.x < -50){ // right scores
+    score.right += 1;
+    scoreRightEl.textContent = score.right;
+    if (score.right >= winScore){ running = false; alert('Right player wins!'); }
+    ballReset(1);
+  } else if (ball.x > canvas.clientWidth + 50){
+    score.left += 1;
+    scoreLeftEl.textContent = score.left;
+    if (score.left >= winScore){ running = false; alert('Left player wins!'); }
+    ballReset(-1);
+  }
+}
+
+// draw
+function draw(){
+  // background
+  ctx.clearRect(0,0,canvas.clientWidth,canvas.clientHeight);
+  // court center line
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  for (let y = 0; y < h; y += 24){
+    ctx.fillRect(w/2 - 2, y + 8, 4, 12);
+  }
+
+  // paddles
+  ctx.fillStyle = '#e6eef8';
+  roundRect(ctx, leftPaddle.x, leftPaddle.y, leftPaddle.w, leftPaddle.h, 6, true, false);
+  roundRect(ctx, rightPaddle.x, rightPaddle.y, rightPaddle.w, rightPaddle.h, 6, true, false);
+
+  // ball
+  ctx.beginPath();
+  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+  ctx.fillStyle = '#ffd166';
+  ctx.fill();
+  ctx.closePath();
+
+  // small scoreboard text displayed on canvas (optional)
+  ctx.fillStyle = 'rgba(255,255,255,0.08)';
+  ctx.font = '12px system-ui';
+  ctx.fillText('Ping Pong — JS Canvas', 12, 18);
+}
+
+// small round rect util
+function roundRect(ctx, x, y, w, h, r=6, fill=true, stroke=false){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
+// main loop
+function loop(ts){
+  if (!running || paused) return;
+  const dt = Math.min(1/30, (ts - lastTimestamp) / 1000);
+  lastTimestamp = ts;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// init
+reset();
+
+// expose simple keyboard start
+window.addEventListener('keydown', (e)=> {
+  if ((e.key === 'Enter' || e.key === ' ') && !running) { start(); }
+});
